@@ -157,12 +157,18 @@ static char *copy_channel_layout(const AVChannelLayout *layout) {
   return av_strdup(buffer);
 }
 
-/* Ask the decoder for coded dimensions when codec parameters do not expose
- * them. */
+/* Report coded dimensions for video streams.
+ *
+ * The default wasm build ships WITHOUT decoders to keep the binary small,
+ * so coded_width/height fall back to the parsed frame size in codecpar.
+ *
+ * To get exact coded dimensions, build FFmpeg WITH the decoders you need
+ * (e.g. --enable-decoder=h264,hevc,...) and define FFPROBE_USE_DECODER at
+ * compile time. The decoder-open path below queries AVCodecContext for the
+ * real coded_width/coded_height.
+ */
 static void fill_coded_dimensions(Stream *out, const AVStream *stream) {
   const AVCodecParameters *codecpar = stream->codecpar;
-  const AVCodec *decoder;
-  AVCodecContext *decoder_context;
 
   out->coded_width = 0;
   out->coded_height = 0;
@@ -170,27 +176,42 @@ static void fill_coded_dimensions(Stream *out, const AVStream *stream) {
     return;
   }
 
-  decoder = avcodec_find_decoder(codecpar->codec_id);
-  if (!decoder) {
+#ifdef FFPROBE_USE_DECODER
+  {
+    const AVCodec *decoder = avcodec_find_decoder(codecpar->codec_id);
+    AVCodecContext *decoder_context;
+
+    if (!decoder) {
+      out->coded_width = codecpar->width;
+      out->coded_height = codecpar->height;
+      return;
+    }
+
+    decoder_context = avcodec_alloc_context3(decoder);
+    if (!decoder_context) {
+      out->coded_width = codecpar->width;
+      out->coded_height = codecpar->height;
+      return;
+    }
+
+    if (avcodec_parameters_to_context(decoder_context, codecpar) >= 0 &&
+        avcodec_open2(decoder_context, decoder, NULL) >= 0) {
+      out->coded_width = decoder_context->coded_width > 0
+                             ? decoder_context->coded_width
+                             : decoder_context->width;
+      out->coded_height = decoder_context->coded_height > 0
+                              ? decoder_context->coded_height
+                              : decoder_context->height;
+    }
+
+    avcodec_free_context(&decoder_context);
     return;
   }
-
-  decoder_context = avcodec_alloc_context3(decoder);
-  if (!decoder_context) {
-    return;
-  }
-
-  if (avcodec_parameters_to_context(decoder_context, codecpar) >= 0 &&
-      avcodec_open2(decoder_context, decoder, NULL) >= 0) {
-    out->coded_width = decoder_context->coded_width > 0
-                           ? decoder_context->coded_width
-                           : decoder_context->width;
-    out->coded_height = decoder_context->coded_height > 0
-                            ? decoder_context->coded_height
-                            : decoder_context->height;
-  }
-
-  avcodec_free_context(&decoder_context);
+#else
+  /* Decoder-free build: use the parsed frame size from codec parameters. */
+  out->coded_width = codecpar->width;
+  out->coded_height = codecpar->height;
+#endif
 }
 
 static void free_streams(Stream *streams, int stream_count) {
