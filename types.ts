@@ -121,8 +121,3 @@ export type ProbeResult = {
   error_message: string;
   response: FileResponse | undefined;
 };
-
-// ffprobe prints time fields as fixed-6 decimal strings ("12.345000").
-// Use this consumer-side when you need byte-exact text parity.
-export const ffTime = (n: number | null): string | null =>
-  n == null || Number.isNaN(n) ? null : n.toFixed(6);

@@ -1,0 +1,9 @@
+{
+  // types.ts is pure type declarations -- emit only the .d.ts, never a
+  // (would-be empty) .js. helpers.ts uses the default tsconfig.json instead.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true
+  },
+  "include": ["types.ts"]
+}

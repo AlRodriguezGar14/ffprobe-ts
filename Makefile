@@ -39,11 +39,12 @@ $(DIST)/ffprobe.mjs: $(SOURCES) ffprobe.h | $(DIST)
 	emcc $(CFLAGS) $(SOURCES) $(LDFLAGS) $(EMFLAGS) -o $@
 	@echo "built $@ + $(DIST)/ffprobe.wasm"
 
-# Emit .d.ts from the hand-written types.ts so consumers get types.
+# types.ts -> declarations only; helpers.ts -> .js + .d.ts. Two configs
+# so the pure-types file does not emit an empty types.js.
 types: $(DIST)/types.d.ts
-$(DIST)/types.d.ts: types.ts tsconfig.json | $(DIST)
+$(DIST)/types.d.ts: types.ts helpers.ts tsconfig.json tsconfig.types.json | $(DIST)
 	tsc --project tsconfig.json
-	@cp types.ts $(DIST)/types.ts
+	tsc --project tsconfig.types.json
 
 $(DIST):
 	mkdir -p $(DIST)
