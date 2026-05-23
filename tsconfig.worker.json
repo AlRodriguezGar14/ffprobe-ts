@@ -1,0 +1,10 @@
+{
+  // Type-check only for worker.ts + its ffprobe-module.ts wrapper. esbuild
+  // produces the actual dist/worker.js bundle, so tsc emits nothing here --
+  // this pass exists purely to catch type errors in the worker sources.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["worker.ts", "ffprobe-module.ts"]
+}

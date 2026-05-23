@@ -1,9 +1,10 @@
 {
-  // types.ts is pure type declarations -- emit only the .d.ts, never a
-  // (would-be empty) .js. helpers.ts uses the default tsconfig.json instead.
+  // Declaration-only files: emit .d.ts, never a (would-be empty) .js.
+  // types.ts -- public response types. protocol.ts -- worker wire contract
+  // (its .d.ts ships so client.d.ts can reference it).
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "emitDeclarationOnly": true
   },
-  "include": ["types.ts"]
+  "include": ["types.ts", "protocol.ts"]
 }

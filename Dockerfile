@@ -46,9 +46,13 @@ RUN emconfigure ./configure \
     && emmake make install \
     && make distclean
 
-# --- Node toolchain for tsc ----------------------------------------------
-# emsdk image ships Node already; install only TypeScript globally.
-RUN npm install -g typescript@5.7.2
+# --- Node toolchain for tsc + esbuild ------------------------------------
+# emsdk image ships Node already. Install the build tools into a fixed
+# prefix (/opt/buildtools) outside the mounted /work, and point NODE_PATH
+# there so build.mjs -- run from /work -- can `import "esbuild"`.
+RUN npm install --prefix /opt/buildtools typescript@5.7.2 esbuild@0.24.2
+ENV NODE_PATH=/opt/buildtools/node_modules
+ENV PATH=/opt/buildtools/node_modules/.bin:$PATH
 
 # Sources are mounted here at run time; Makefile drives the rest.
 WORKDIR /work
