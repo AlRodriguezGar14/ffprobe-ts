@@ -1,18 +1,19 @@
 {
   // Shared compiler options. Concrete build targets extend this:
-  //   tsconfig.client.json  -- emits client.js + .d.ts (the public entry)
-  //   tsconfig.types.json   -- emits .d.ts only for the pure-type files
-  // worker.ts is NOT compiled by tsc; esbuild bundles it (see build.mjs).
+  //   tsconfig/client.json  -- emits index.js + .d.ts (the public entry)
+  //   tsconfig/types.json   -- emits .d.ts only for the pure-type files
+  //   tsconfig/worker.json  -- type-checks worker.ts (esbuild emits the JS)
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    // DOM: Worker/MessageChannel for client.ts. WebWorker: worker globals
+    // DOM: Worker/MessageChannel for index.ts. WebWorker: worker globals
     // needed so worker.ts still type-checks under the noEmit pass.
     "lib": ["ES2020", "DOM", "WebWorker"],
     "strict": true,
     "declaration": true,
-    "outDir": "dist",
+    "rootDir": "../src",
+    "outDir": "../dist",
     // type-only imports are fully elided -> the client build does not emit
     // empty types.js / protocol.js for the declaration-only files.
     "verbatimModuleSyntax": true,

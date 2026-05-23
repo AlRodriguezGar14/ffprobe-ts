@@ -1,7 +1,7 @@
 // Typed wrapper around the Emscripten artifact dist/ffprobe.mjs (emcc emits
 // no .d.ts). worker.ts imports the factory from here; esbuild resolves the
 // real ./ffprobe.mjs at bundle time, when it sits beside the output.
-import type { ProbeResult } from "./types.js";
+import type { ProbeResult } from "./types/index.js";
 
 // Emscripten FS node, narrowed to what the worker mounts/unmounts.
 export interface EmscriptenFS {

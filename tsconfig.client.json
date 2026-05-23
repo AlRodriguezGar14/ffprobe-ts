@@ -1,8 +1,0 @@
-{
-  // Public entry point: emits dist/client.js + client.d.ts. client.ts
-  // pulls in protocol.ts and types.ts for declarations; the worker is
-  // referenced only via new URL("./worker.js", ...) so it is not compiled
-  // here -- esbuild bundles worker.ts separately.
-  "extends": "./tsconfig.json",
-  "include": ["client.ts", "helpers.ts"]
-}

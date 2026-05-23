@@ -1,6 +1,7 @@
-// Bundles worker.ts (with dist/ffprobe.mjs inlined) into a single
-// dist/worker.js. Run after emcc has produced dist/ffprobe.mjs and after
-// tsc has emitted the declarations. See Makefile target `bundle`.
+// Bundles src/worker.ts (with dist/ffprobe.mjs inlined) into a single
+// dist/worker.js. Run from the repo root after emcc has produced
+// dist/ffprobe.mjs and after tsc has emitted the declarations.
+// See Makefile target `bundle`.
 
 import { build } from "esbuild";
 import { resolve } from "node:path";
@@ -18,7 +19,7 @@ const redirectFfprobeModule = {
 };
 
 await build({
-  entryPoints: ["worker.ts"],
+  entryPoints: ["src/worker.ts"],
   outfile: "dist/worker.js",
   bundle: true,
   format: "esm",

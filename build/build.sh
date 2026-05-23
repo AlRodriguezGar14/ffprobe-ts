@@ -3,16 +3,18 @@
 # inside it. WASM + .d.ts land in ./dist on the host via the bind mount.
 #
 # Usage:
-#   ./build.sh            # build everything into dist/
-#   ./build.sh clean      # remove dist/
-#   ./build.sh wasm       # wasm only, skip tsc
+#   ./build/build.sh            # build everything into dist/
+#   ./build/build.sh clean      # remove dist/
+#   ./build/build.sh wasm       # wasm only, skip tsc
 set -euo pipefail
 
 IMAGE=ffprobe-ts-build
-cd "$(dirname "$0")"
+
+# Always run from the repo root so the bind mount sees src/, native/, etc.
+cd "$(dirname "$0")/.."
 
 echo ">> docker build ($IMAGE)"
-docker build -t "$IMAGE" .
+docker build -t "$IMAGE" -f build/Dockerfile .
 
 echo ">> docker run -> make ${*:-all}"
 docker run --rm -v "$PWD":/work "$IMAGE" "$@"

@@ -6,18 +6,18 @@
 //   if (res.error_code === 0) console.log(res.response.format);
 
 import type { ProbeRequest, ProbeResponse } from "./protocol.js";
-import type { ProbeResult } from "./types.js";
+import type { ProbeResult } from "./types/index.js";
 
-export type { ProbeResult } from "./types.js";
 export type {
   Chapter,
   Disposition,
   FileResponse,
   Format,
+  ProbeResult,
   Rational,
   Stream,
   Tag,
-} from "./types.js";
+} from "./types/index.js";
 
 // Lazily spawned, then reused: the wasm module is instantiated once inside
 // the worker and amortized across every probe() call.

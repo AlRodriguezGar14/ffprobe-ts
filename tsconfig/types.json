@@ -1,0 +1,10 @@
+{
+  // Declaration-only files: emit .d.ts, never a (would-be empty) .js.
+  // types/* -- public response types. protocol.ts -- worker wire contract
+  // (its .d.ts ships so index.d.ts can reference it).
+  "extends": "./base.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true
+  },
+  "include": ["../src/types/**/*.ts", "../src/protocol.ts"]
+}

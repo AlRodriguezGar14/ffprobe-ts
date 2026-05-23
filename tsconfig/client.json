@@ -1,0 +1,8 @@
+{
+  // Public entry point: emits dist/index.js + index.d.ts. index.ts pulls in
+  // protocol.ts and types/* for declarations; the worker is referenced only
+  // via new URL("./worker.js", ...) so it is not compiled here -- esbuild
+  // bundles worker.ts separately.
+  "extends": "./base.json",
+  "include": ["../src/index.ts", "../src/helpers.ts"]
+}

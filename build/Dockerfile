@@ -57,5 +57,5 @@ ENV PATH=/opt/buildtools/node_modules/.bin:$PATH
 # Sources are mounted here at run time; Makefile drives the rest.
 WORKDIR /work
 ENV FFMPEG_PREFIX=/opt/ffmpeg
-ENTRYPOINT ["make"]
+ENTRYPOINT ["make", "-f", "build/Makefile"]
 CMD ["all"]
