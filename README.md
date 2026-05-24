@@ -11,6 +11,14 @@ npm install ffprobe-ts
 
 ```ts
 import { probe } from "ffprobe-ts";
+import type {
+  Disposition,
+  FileResponse,
+  Format,
+  Rational,
+  Stream,
+  Tag,
+} from "ffprobe-ts/types";
 
 const result = await probe(file); // file: File (e.g. from <input type="file">)
 
