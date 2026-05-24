@@ -5,6 +5,10 @@ media `File` in a Web Worker. No setup, no worker wiring.
 
 ## Usage
 
+```sh
+npm install ffprobe-ts
+```
+
 ```ts
 import { probe } from "ffprobe-ts";
 
