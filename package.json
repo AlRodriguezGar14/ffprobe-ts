@@ -1,0 +1,43 @@
+{
+  "name": "ffprobe-ts",
+  "version": "0.1.0",
+  "description": "FFprobe compiled to WebAssembly with TypeScript bindings",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts"
+    },
+    "./helpers": {
+      "types": "./dist/helpers.d.ts",
+      "default": "./dist/helpers.js"
+    }
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
+    "dist/worker.js",
+    "dist/ffprobe.wasm",
+    "dist/types",
+    "dist/protocol.d.ts",
+    "dist/helpers.js",
+    "dist/helpers.d.ts"
+  ],
+  "scripts": {
+    "build": "./build/build.sh",
+    "clean": "./build/build.sh clean"
+  },
+  "license": "LGPL-2.1-or-later",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.0"
+  }
+}
